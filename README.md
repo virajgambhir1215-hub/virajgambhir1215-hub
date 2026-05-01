@@ -3,733 +3,924 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>virajgambhir1215-hub / README</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
+<title>Viraj Gambhir // Cybersecurity Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --bg: #020608;
-  --bg2: #050d0f;
-  --bg3: #071015;
-  --cyan: #00ff9d;
-  --gold: #f0c040;
-  --red: #ff2255;
-  --purple: #bf5fff;
-  --text: #b0ffd0;
-  --muted: #3a6050;
-  --dim: #1a3028;
-  --border: rgba(0,255,157,0.13);
+  --bg:        #04080f;
+  --bg2:       #060d18;
+  --bg3:       #081020;
+  --cyan:      #00d4ff;
+  --cyan2:     #00a8cc;
+  --cyan3:     rgba(0,212,255,0.15);
+  --gold:      #e8c46a;
+  --gold2:     rgba(232,196,106,0.15);
+  --green:     #00ff88;
+  --red:       #ff2255;
+  --purple:    #7b2fff;
+  --text:      #cdd6e8;
+  --muted:     #4a6080;
+  --border:    rgba(0,212,255,0.12);
+  --sidebar-w: 260px;
+  --glow-c:    0 0 20px rgba(0,212,255,0.4),0 0 60px rgba(0,212,255,0.15);
+  --glow-g:    0 0 20px rgba(232,196,106,0.4),0 0 60px rgba(232,196,106,0.15);
 }
-* { margin:0; padding:0; box-sizing:border-box; cursor:none !important; }
-html { scroll-behavior: smooth; }
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
 
-body {
-  font-family: 'Share Tech Mono', monospace;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-  line-height: 1.7;
-}
+/* ── CURSOR ── */
+*{cursor:none!important;}
+#cursor{position:fixed;width:12px;height:12px;border:2px solid var(--cyan);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .15s,height .15s,border-color .15s;mix-blend-mode:screen;}
+#cursor-trail{position:fixed;width:30px;height:30px;border:1px solid rgba(0,212,255,0.3);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:all .08s linear;mix-blend-mode:screen;}
+body:has(.card:hover) #cursor{width:20px;height:20px;border-color:var(--gold);}
 
-/* scanlines */
-body::before {
-  content: '';
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px);
-}
-
-/* matrix canvas */
-#mx { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.06; }
-
-/* sweep line */
-.sweep {
-  position: fixed; top: -4px; left: 0; right: 0; height: 3px;
-  z-index: 2; pointer-events: none;
-  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-  box-shadow: 0 0 20px var(--cyan), 0 0 50px rgba(0,255,157,0.3);
-  animation: swp 8s linear infinite;
-}
-@keyframes swp { 0% { top: -4px; } 100% { top: 100vh; } }
-
-/* cursor */
-#cur {
-  position: fixed; width: 10px; height: 10px;
-  background: var(--cyan); border-radius: 50%;
-  pointer-events: none; z-index: 9999;
-  transform: translate(-50%,-50%);
-  box-shadow: 0 0 10px var(--cyan), 0 0 30px rgba(0,255,157,0.4);
-}
-#cur2 {
-  position: fixed; width: 28px; height: 28px;
-  border: 1px solid rgba(0,255,157,0.4); border-radius: 50%;
-  pointer-events: none; z-index: 9998;
-  transform: translate(-50%,-50%);
-  transition: all 0.08s linear;
+body{
+  font-family:'Share Tech Mono',monospace;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
 }
 
-/* wrapper */
-.wrap {
-  max-width: 900px; margin: 0 auto;
-  padding: 40px 20px 80px;
-  position: relative; z-index: 3;
+/* ══ BOOT SCREEN ══ */
+#boot{
+  position:fixed;inset:0;background:#000;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  font-family:'Share Tech Mono',monospace;
+}
+#boot.out{animation:bootOut .8s ease forwards;}
+@keyframes bootOut{to{opacity:0;filter:blur(8px);pointer-events:none;}}
+
+.boot-hex{
+  width:100px;height:100px;
+  position:relative;display:flex;align-items:center;justify-content:center;
+}
+.boot-hex svg{position:absolute;inset:0;animation:hexSpin 3s linear infinite;}
+.boot-hex-text{font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:900;color:var(--cyan);
+  text-shadow:var(--glow-c);animation:hexPulse 1s ease-in-out infinite;}
+@keyframes hexSpin{to{transform:rotate(360deg);}}
+@keyframes hexPulse{0%,100%{opacity:.7;}50%{opacity:1;}}
+
+.boot-status{font-size:.65rem;color:var(--cyan);letter-spacing:3px;text-transform:uppercase;}
+.boot-log{width:420px;display:flex;flex-direction:column;gap:5px;}
+.blog{font-size:.65rem;opacity:0;transition:opacity .1s;}
+.blog.on{opacity:1;}
+.blog .ok{color:var(--green);}
+.blog .warn{color:var(--gold);}
+.blog .err{color:var(--red);}
+
+.boot-progress-wrap{width:420px;position:relative;}
+.boot-progress-track{height:2px;background:rgba(0,212,255,.1);border-radius:1px;overflow:hidden;}
+.boot-progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--cyan2),var(--cyan),#fff);
+  box-shadow:0 0 12px var(--cyan);animation:bprog 2.2s ease .6s forwards;}
+@keyframes bprog{to{width:100%;}}
+.boot-progress-pct{position:absolute;right:0;top:-18px;font-size:.6rem;color:var(--cyan);}
+
+/* ══ PARTICLE CANVAS ══ */
+#particle-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6;}
+
+/* ══ HEX GRID BG ══ */
+.hex-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V18L28 2l28 16v32L28 66z' fill='none' stroke='rgba(0,212,255,0.04)' stroke-width='1'/%3E%3C/svg%3E");
+  background-size:56px 100px;
+  animation:hexDrift 20s linear infinite;
+}
+@keyframes hexDrift{0%{background-position:0 0;}100%{background-position:56px 100px;}}
+
+/* ══ SCAN LINES ══ */
+.scanlines{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 4px);
+}
+.scan-sweep{
+  position:fixed;top:0;left:0;right:0;height:3px;z-index:2;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(0,212,255,.6),transparent);
+  animation:sweep 6s linear infinite;
+  box-shadow:0 0 20px var(--cyan),0 0 60px rgba(0,212,255,.3);
+}
+@keyframes sweep{0%{top:-3px;}100%{top:100vh;}}
+
+/* ══ NOISE OVERLAY ══ */
+.noise{
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* terminal window */
-.terminal {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px; overflow: hidden;
-  box-shadow: 0 0 60px rgba(0,255,157,0.04), 0 20px 60px rgba(0,0,0,0.7);
-  margin-bottom: 20px;
-  opacity: 0; transform: translateY(24px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-.terminal.vis { opacity: 1; transform: none; }
-
-.term-bar {
-  background: #0a1a14;
-  padding: 10px 16px;
-  display: flex; align-items: center; gap: 8px;
-  border-bottom: 1px solid var(--border);
-}
-.dot { width: 11px; height: 11px; border-radius: 50%; }
-.dot.r { background: #ff5f56; box-shadow: 0 0 6px #ff5f56; }
-.dot.y { background: #ffbd2e; box-shadow: 0 0 6px #ffbd2e; }
-.dot.g { background: #27c93f; box-shadow: 0 0 6px #27c93f; }
-.term-title {
-  margin: 0 auto;
-  font-size: 0.62rem; color: var(--muted); letter-spacing: 2px;
-}
-.term-body { padding: 22px 26px; }
-
-/* glitch name */
-.glitch-wrap { text-align: center; padding: 8px 0 18px; }
-.glitch {
-  font-family: 'Orbitron', monospace;
-  font-size: clamp(1.5rem, 5vw, 2.8rem);
-  font-weight: 900; color: var(--cyan);
-  letter-spacing: 6px;
-  text-shadow: 0 0 20px rgba(0,255,157,0.4), 0 0 60px rgba(0,255,157,0.15);
-  display: inline-block; position: relative;
-  animation: g1 6s infinite 3s;
-}
-.glitch::before, .glitch::after {
-  content: attr(data-text);
-  position: absolute; inset: 0;
-  font-family: 'Orbitron', monospace;
-  font-size: inherit; font-weight: inherit; letter-spacing: inherit;
-}
-.glitch::before { color: var(--red); clip-path: polygon(0 20%,100% 20%,100% 40%,0 40%); animation: gb 6s infinite 3s; }
-.glitch::after  { color: #00ccff;  clip-path: polygon(0 60%,100% 60%,100% 80%,0 80%); animation: ga 6s infinite 3.05s; }
-@keyframes g1 { 0%,85%,100%{transform:none;} 86%{transform:translate(-2px,0);} 88%{transform:translate(2px,0);} 90%{transform:none;} }
-@keyframes gb { 0%,85%,100%{opacity:0;transform:none;} 86%{opacity:1;transform:translate(-3px,0);} 88%{transform:translate(3px,0);} 90%{opacity:0;} }
-@keyframes ga { 0%,85%,100%{opacity:0;transform:none;} 87%{opacity:1;transform:translate(3px,0);} 89%{transform:translate(-3px,0);} 90%{opacity:0;} }
-
-.subtitle {
-  font-size: 0.68rem; color: var(--muted);
-  letter-spacing: 2px; margin-top: 10px; text-align: center;
-}
-.blink { animation: bl 1.3s step-end infinite; }
-@keyframes bl { 50% { opacity: 0; } }
-
-/* badges */
-.badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 16px 0 8px; }
-.badge {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 6px 14px; border-radius: 5px;
-  font-size: 0.6rem; letter-spacing: 0.5px;
-  text-decoration: none; border: 1px solid;
-  transition: transform 0.2s, box-shadow 0.2s;
-  overflow: hidden; position: relative;
-}
-.badge::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-  transform: translateX(-100%); transition: transform 0.4s;
-}
-.badge:hover::before { transform: translateX(100%); }
-.badge:hover { transform: translateY(-2px); }
-.b-li  { background: rgba(0,119,181,0.15); border-color: rgba(0,119,181,0.4); color: #4fbaff; }
-.b-gh  { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); color: #ccc; }
-.b-gm  { background: rgba(209,72,54,0.15); border-color: rgba(209,72,54,0.3); color: #ff7060; }
-.b-loc { background: rgba(0,255,157,0.06); border-color: rgba(0,255,157,0.2); color: var(--cyan); }
-.b-st  { background: rgba(0,255,157,0.06); border-color: rgba(0,255,157,0.2); color: var(--cyan); font-size: 0.58rem; }
-.b-li:hover  { box-shadow: 0 4px 20px rgba(0,119,181,0.3); }
-.b-gh:hover  { box-shadow: 0 4px 20px rgba(255,255,255,0.1); }
-.b-gm:hover  { box-shadow: 0 4px 20px rgba(209,72,54,0.2); }
-.b-loc:hover { box-shadow: 0 4px 20px rgba(0,255,157,0.15); }
-
-.pdot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--cyan); display: inline-block;
-  box-shadow: 0 0 8px var(--cyan);
-  animation: pd 2s ease-in-out infinite;
-}
-@keyframes pd { 0%,100%{opacity:1;box-shadow:0 0 8px var(--cyan);} 50%{opacity:0.5;box-shadow:0 0 20px var(--cyan);} }
-
-/* section heading */
-.sh {
-  font-family: 'Orbitron', monospace;
-  font-size: 0.8rem; font-weight: 700;
-  color: var(--cyan); letter-spacing: 3px; text-transform: uppercase;
-  margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
-}
-.sh::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
-
-/* whoami block */
-.wblock {
-  background: rgba(0,255,157,0.03);
-  border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px;
-  position: relative; overflow: hidden;
-}
-.wblock::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-  width: 2px; background: linear-gradient(180deg, var(--cyan), transparent);
-}
-.prompt { font-size: 0.63rem; color: var(--muted); margin-bottom: 8px; }
-.prompt .u { color: #27c93f; }
-.prompt .p { color: var(--cyan); }
-.plines { display: flex; flex-direction: column; gap: 4px; }
-.pl { font-size: 0.68rem; display: flex; }
-.pk { color: var(--muted); min-width: 82px; }
-.pv { color: #fff; }
-.pv .h { color: var(--cyan); }
-.pv .g { color: var(--cyan); }
-.qblock {
-  border-left: 2px solid var(--cyan); padding: 10px 14px; margin-top: 14px;
-  background: rgba(0,255,157,0.03); border-radius: 0 6px 6px 0;
-  font-size: 0.68rem; color: var(--muted); font-style: italic; line-height: 1.8;
+/* ══ PAGE ══ */
+.page{
+  width:210mm;min-height:297mm;margin:40px auto;
+  display:flex;position:relative;z-index:3;
+  box-shadow:0 0 0 1px var(--border),0 0 80px rgba(0,212,255,.08),0 40px 120px rgba(0,0,0,.8);
+  background:var(--bg);
+  overflow:hidden;
 }
 
-/* about list */
-.alist { display: flex; flex-direction: column; gap: 8px; }
-.al {
-  display: flex; align-items: flex-start; gap: 10px;
-  font-size: 0.7rem; line-height: 1.7;
-  padding: 8px 12px; border-radius: 6px;
-  border: 1px solid transparent;
-  transition: background 0.25s, border-color 0.25s, transform 0.25s;
-}
-.al:hover { background: rgba(0,255,157,0.04); border-color: var(--border); transform: translateX(5px); }
-.al b { color: var(--cyan); }
-.ali { flex-shrink: 0; margin-top: 1px; }
+/* corner brackets */
+.page::before,.page::after{content:'';position:absolute;width:24px;height:24px;z-index:10;}
+.page::before{top:8px;left:8px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan);opacity:.6;}
+.page::after{top:8px;right:8px;border-top:2px solid var(--cyan);border-right:2px solid var(--cyan);opacity:.6;}
 
-/* skill section */
-.scat { margin-bottom: 16px; }
-.clabel {
-  font-size: 0.58rem; color: var(--muted);
-  letter-spacing: 2px; text-transform: uppercase;
-  margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+/* animated top accent bar */
+.top-bar{position:absolute;top:0;left:0;right:0;height:2px;z-index:10;overflow:hidden;}
+.top-bar::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,var(--cyan),var(--gold),var(--cyan),transparent);
+  animation:topScan 3s ease 3s forwards;
 }
-.clabel::after { content: ''; flex: 1; height: 1px; background: var(--dim); }
-.srow { display: flex; flex-wrap: wrap; gap: 7px; }
-.sk {
-  padding: 5px 12px; border-radius: 5px;
-  font-size: 0.58rem; letter-spacing: 0.5px; border: 1px solid;
-  display: flex; align-items: center; gap: 5px;
-  transition: transform 0.2s, box-shadow 0.2s; cursor: default;
+@keyframes topScan{0%{left:-100%;}100%{left:100%;}}
+.top-bar::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:100%;
+  background:linear-gradient(90deg,transparent 0%,rgba(0,212,255,.3) 50%,transparent 100%);
+  animation:topGlow 4s ease-in-out 4s infinite;
 }
-.sk:hover { transform: translateY(-2px); }
-.sk-cy { background: rgba(0,212,255,0.07); border-color: rgba(0,212,255,0.25); color: #00d4ff; }
-.sk-re { background: rgba(255,34,85,0.07); border-color: rgba(255,34,85,0.25); color: #ff5577; }
-.sk-go { background: rgba(240,192,64,0.07); border-color: rgba(240,192,64,0.25); color: var(--gold); }
-.sk-gr { background: rgba(0,255,157,0.07); border-color: rgba(0,255,157,0.2); color: var(--cyan); }
-.sk-pu { background: rgba(191,95,255,0.07); border-color: rgba(191,95,255,0.25); color: var(--purple); }
-.sk-cy:hover { box-shadow: 0 4px 14px rgba(0,212,255,0.2); }
-.sk-re:hover { box-shadow: 0 4px 14px rgba(255,34,85,0.2); }
-.sk-go:hover { box-shadow: 0 4px 14px rgba(240,192,64,0.2); }
-.sk-gr:hover { box-shadow: 0 4px 14px rgba(0,255,157,0.15); }
-.sk-pu:hover { box-shadow: 0 4px 14px rgba(191,95,255,0.2); }
+@keyframes topGlow{0%,100%{opacity:0;}50%{opacity:1;}}
 
-/* project card */
-.pcard {
-  background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 10px; padding: 18px 20px; margin-bottom: 14px;
-  position: relative; overflow: hidden;
-  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+/* ══ SIDEBAR ══ */
+.sidebar{
+  width:var(--sidebar-w);min-width:var(--sidebar-w);
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  padding:32px 18px;
+  display:flex;flex-direction:column;gap:24px;
+  position:relative;overflow:hidden;
 }
-.pcard:hover {
-  border-color: rgba(0,255,157,0.35);
-  box-shadow: 0 0 40px rgba(0,255,157,0.05), 0 10px 40px rgba(0,0,0,0.5);
-  transform: translateY(-3px);
-}
-.pcard::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-  background: linear-gradient(180deg, var(--cyan), transparent);
-}
-.pcard::after {
-  content: ''; position: absolute; top: 0; left: -100%; width: 40%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0,255,157,0.03), transparent);
-  transition: left 0.7s; pointer-events: none;
-}
-.pcard:hover::after { left: 200%; }
-.ptitle { font-family: 'Orbitron', monospace; font-size: 0.82rem; font-weight: 700; color: #fff; letter-spacing: 1px; margin-bottom: 4px; }
-.ptag   { font-size: 0.58rem; color: var(--cyan); margin-bottom: 10px; letter-spacing: 1px; }
-.pline  { font-size: 0.63rem; color: var(--muted); font-style: italic; margin-bottom: 12px; padding: 5px 10px; border-left: 2px solid var(--muted); }
 
-.ascii {
-  background: #020a06; border: 1px solid var(--dim); border-radius: 6px;
-  padding: 12px 14px; margin-bottom: 12px;
-  font-size: 0.59rem; color: #2a5040; line-height: 1.6;
-  overflow-x: auto; white-space: pre;
-  font-family: 'Share Tech Mono', monospace;
+/* circuit trace lines on sidebar */
+.sidebar::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(180deg,transparent 20%,rgba(0,212,255,.03) 20%,rgba(0,212,255,.03) 20.5%,transparent 20.5%),
+    linear-gradient(180deg,transparent 55%,rgba(0,212,255,.03) 55%,rgba(0,212,255,.03) 55.5%,transparent 55.5%),
+    linear-gradient(90deg,transparent 40%,rgba(0,212,255,.03) 40%,rgba(0,212,255,.03) 40.5%,transparent 40.5%);
 }
-.ascii .hl { color: var(--cyan); }
 
-.pdesc { font-size: 0.68rem; line-height: 1.8; margin-bottom: 10px; }
-.pdesc b { color: var(--cyan); }
-.pbullets { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
-.pb { font-size: 0.66rem; line-height: 1.6; padding-left: 14px; position: relative; }
-.pb::before { content: '▸'; position: absolute; left: 0; color: var(--cyan); }
-.pb b { color: var(--cyan); }
-
-.stk { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
-.sp {
-  font-size: 0.56rem; padding: 2px 8px; border-radius: 20px;
-  border: 1px solid rgba(0,255,157,0.2); color: var(--cyan);
-  background: rgba(0,255,157,0.05);
-  transition: background 0.2s, box-shadow 0.2s;
+/* dot grid */
+.sidebar::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(rgba(0,212,255,.05) 1px,transparent 1px);
+  background-size:16px 16px;
+  animation:dotBreath 5s ease-in-out infinite;
 }
-.sp:hover { background: rgba(0,255,157,0.15); box-shadow: 0 0 8px rgba(0,255,157,0.2); }
+@keyframes dotBreath{0%,100%{opacity:.4;}50%{opacity:1;}}
 
-/* table */
-.gtbl { width: 100%; border-collapse: collapse; font-size: 0.66rem; margin-top: 4px; }
-.gtbl th { background: rgba(0,255,157,0.06); color: var(--cyan); padding: 9px 12px; text-align: left; border: 1px solid var(--dim); font-size: 0.6rem; letter-spacing: 1px; }
-.gtbl td { padding: 9px 12px; border: 1px solid var(--dim); color: var(--text); transition: background 0.2s; }
-.gtbl tr:hover td { background: rgba(0,255,157,0.03); }
-.gtbl b { color: var(--gold); }
+/* ── AVATAR ── */
+.av-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;position:relative;z-index:1;}
+
+.av-outer{
+  position:relative;width:110px;height:110px;
+  display:flex;align-items:center;justify-content:center;
+}
+.av-ring1,.av-ring2,.av-ring3{
+  position:absolute;border-radius:50%;border:1px solid;
+}
+.av-ring1{inset:-4px;border-color:rgba(0,212,255,.5);animation:ringR1 4s linear infinite;}
+.av-ring2{inset:-12px;border-color:rgba(0,212,255,.2);animation:ringR2 7s linear infinite reverse;}
+.av-ring3{inset:-22px;border-color:rgba(0,212,255,.08);animation:ringR3 12s linear infinite;}
+@keyframes ringR1{to{transform:rotate(360deg);}}
+@keyframes ringR2{to{transform:rotate(360deg);}}
+@keyframes ringR3{to{transform:rotate(360deg);}}
+
+/* ring dots */
+.av-ring1::before,.av-ring2::before{
+  content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+  width:6px;height:6px;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 8px var(--cyan);
+}
+.av-ring2::before{top:-3px;width:4px;height:4px;background:var(--gold);}
+
+.av{
+  width:90px;height:90px;border-radius:50%;
+  background:linear-gradient(135deg,#051525,#0a2540);
+  border:2px solid var(--cyan);
+  box-shadow:0 0 30px rgba(0,212,255,.3),inset 0 0 30px rgba(0,212,255,.05);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',monospace;font-size:1.6rem;font-weight:900;
+  color:var(--cyan);letter-spacing:2px;
+  animation:avGlow 3s ease-in-out infinite;
+  transition:transform .3s;position:relative;z-index:1;
+}
+.av:hover{transform:scale(1.08);}
+@keyframes avGlow{
+  0%,100%{box-shadow:0 0 30px rgba(0,212,255,.3),inset 0 0 30px rgba(0,212,255,.05);}
+  50%{box-shadow:0 0 50px rgba(0,212,255,.5),inset 0 0 50px rgba(0,212,255,.1);}
+}
+
+.av-name{
+  font-family:'Orbitron',monospace;font-size:.75rem;font-weight:700;
+  color:#fff;text-align:center;letter-spacing:2px;
+  text-shadow:0 0 20px rgba(0,212,255,.5);
+  position:relative;z-index:1;
+}
+.av-tag{
+  font-size:.55rem;color:var(--cyan);letter-spacing:2.5px;
+  text-transform:uppercase;border:1px solid rgba(0,212,255,.3);
+  padding:3px 10px;border-radius:20px;
+  background:rgba(0,212,255,.06);
+  animation:tagPulse 3s ease-in-out infinite;
+  position:relative;z-index:1;
+}
+@keyframes tagPulse{0%,100%{box-shadow:none;}50%{box-shadow:0 0 12px rgba(0,212,255,.3);}}
+
+/* ── S-SECTIONS ── */
+.ss{display:flex;flex-direction:column;gap:10px;position:relative;z-index:1;}
+.st{
+  font-family:'Orbitron',monospace;font-size:.55rem;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;color:var(--cyan);
+  padding-bottom:7px;border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.st::after{
+  content:'';position:absolute;bottom:0;left:-100%;width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  box-shadow:0 0 8px var(--cyan);
+  animation:stScan 4s ease-in-out infinite;
+}
+@keyframes stScan{0%{left:-100%;}50%{left:0%;}100%{left:100%;}}
+
+/* contact */
+.ci{display:flex;flex-direction:column;gap:2px;}
+.cl{font-size:.52rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;}
+.cv{font-size:.62rem;color:var(--text);word-break:break-all;}
+.cv a{color:var(--cyan);text-decoration:none;transition:color .2s,text-shadow .2s;}
+.cv a:hover{color:#fff;text-shadow:0 0 10px var(--cyan);}
+
+/* skill bars */
+.ski{display:flex;flex-direction:column;gap:5px;}
+.skr{display:flex;justify-content:space-between;align-items:center;}
+.skn{font-size:.62rem;color:var(--text);}
+.skp{font-size:.55rem;color:var(--cyan);}
+.skbar{height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;position:relative;}
+.skfill{
+  height:100%;border-radius:2px;width:0%;
+  background:linear-gradient(90deg,var(--cyan2),var(--cyan),rgba(255,255,255,.8));
+  box-shadow:0 0 8px rgba(0,212,255,.6);
+  transition:width 1.6s cubic-bezier(.16,1,.3,1);
+  position:relative;
+}
+.skfill::after{
+  content:'';position:absolute;right:0;top:-2px;width:4px;height:7px;border-radius:2px;
+  background:#fff;box-shadow:0 0 6px var(--cyan);
+  opacity:0;transition:opacity .3s;
+}
+.ski:hover .skfill::after{opacity:1;}
+
+/* tags */
+.tg-group{display:flex;flex-wrap:wrap;gap:5px;}
+.tg{
+  font-size:.55rem;padding:3px 8px;border-radius:20px;
+  border:1px solid var(--border);color:var(--muted);
+  background:rgba(0,212,255,.04);letter-spacing:.5px;
+  transition:all .25s;
+}
+.tg:hover{background:rgba(0,212,255,.15);color:var(--cyan);border-color:var(--cyan);box-shadow:0 0 10px rgba(0,212,255,.2);}
 
 /* cert card */
-.ccard {
-  background: linear-gradient(135deg, rgba(0,255,157,0.05), rgba(240,192,64,0.04));
-  border: 1px solid rgba(240,192,64,0.2); border-radius: 10px; padding: 16px 18px;
-  transition: box-shadow 0.3s, border-color 0.3s;
+.cert{
+  background:linear-gradient(135deg,rgba(0,212,255,.07),rgba(232,196,106,.05));
+  border:1px solid rgba(232,196,106,.2);
+  border-radius:6px;padding:10px 12px;
+  transition:box-shadow .3s,border-color .3s;position:relative;overflow:hidden;
 }
-.ccard:hover { box-shadow: 0 0 30px rgba(240,192,64,0.12); border-color: rgba(240,192,64,0.4); }
-.cname { font-family: 'Orbitron', monospace; font-size: 0.75rem; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
-.cmeta { font-size: 0.63rem; color: var(--muted); line-height: 1.8; }
-.cmeta .h { color: var(--cyan); }
-.cmeta .g { color: var(--gold); }
-.cstatus {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 8px; font-size: 0.6rem; color: var(--cyan);
-  background: rgba(0,255,157,0.06); border: 1px solid rgba(0,255,157,0.2);
-  padding: 3px 10px; border-radius: 20px;
+.cert::before{
+  content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(232,196,106,.06),transparent);
+  transition:left .6s;
 }
-.ctopics { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
-.ctag { font-size: 0.57rem; padding: 2px 8px; border-radius: 20px; border: 1px solid var(--dim); color: var(--muted); }
+.cert:hover::before{left:200%;}
+.cert:hover{box-shadow:0 0 25px rgba(232,196,106,.2);border-color:var(--gold);}
+.cert-name{font-size:.65rem;font-weight:700;color:var(--gold);line-height:1.5;}
+.cert-sub{font-size:.58rem;color:var(--muted);margin-top:3px;}
+.cert-badge{font-size:.58rem;color:var(--green);margin-top:4px;display:flex;align-items:center;gap:4px;}
+.cert-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);display:inline-block;animation:statusPulse 2s infinite;}
 
-/* stats */
-.sgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.simg {
-  width: 100%; border-radius: 8px; border: 1px solid var(--border); display: block;
-  transition: transform 0.2s, box-shadow 0.2s;
+/* ══ MAIN ══ */
+.main{
+  flex:1;padding:32px 28px 32px 26px;
+  display:flex;flex-direction:column;gap:24px;
+  overflow:hidden;position:relative;
 }
-.simg:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0,255,157,0.1); }
-.sfull { grid-column: 1 / -1; }
 
-/* interest ascii */
-.iascii {
-  background: #020a06; border: 1px solid var(--dim); border-radius: 8px;
-  padding: 16px 18px; font-size: 0.63rem; color: #2a5040;
-  line-height: 1.8; white-space: pre; overflow-x: auto;
-  font-family: 'Share Tech Mono', monospace;
+/* ── HEADER ── */
+.hdr{padding-bottom:20px;border-bottom:1px solid var(--border);position:relative;}
+
+.hdr-name{
+  font-family:'Orbitron',monospace;
+  font-size:2rem;font-weight:900;letter-spacing:4px;
+  line-height:1;color:#fff;
+  position:relative;display:inline-block;
 }
-.iascii .hl { color: var(--cyan); }
-
-/* connect table */
-.ctbl { width: 100%; border-collapse: collapse; font-size: 0.66rem; }
-.ctbl td { padding: 10px 12px; border: 1px solid var(--dim); color: var(--text); transition: background 0.2s; }
-.ctbl tr:hover td { background: rgba(0,255,157,0.03); }
-.ctbl a { color: var(--cyan); text-decoration: none; }
-.ctbl a:hover { text-decoration: underline; }
-
-/* footer */
-.footer {
-  background: #020a06; border: 1px solid var(--dim); border-radius: 8px;
-  padding: 14px; text-align: center; font-size: 0.6rem; color: var(--muted);
-  display: flex; flex-direction: column; gap: 8px; margin-top: 14px;
+.hdr-name .acc{color:var(--cyan);text-shadow:0 0 30px rgba(0,212,255,.6);}
+.hdr-name::after{
+  content:attr(data-text);
+  position:absolute;inset:0;
+  color:var(--red);
+  clip-path:polygon(0 0,100% 0,100% 0,0 0);
+  animation:nameGlitch 6s infinite 4s;
 }
-.frow { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
-.fi { display: flex; align-items: center; gap: 6px; }
-.fq { color: var(--text); font-style: italic; margin-top: 2px; }
-.fs { color: var(--muted); }
+@keyframes nameGlitch{
+  0%,88%,100%{clip-path:polygon(0 0,100% 0,100% 0,0 0);transform:translate(0);}
+  89%{clip-path:polygon(0 25%,100% 25%,100% 40%,0 40%);transform:translate(-3px,0);filter:hue-rotate(90deg);}
+  91%{clip-path:polygon(0 60%,100% 60%,100% 75%,0 75%);transform:translate(3px,0);}
+  93%{clip-path:polygon(0 0,100% 0,100% 0,0 0);transform:translate(0);}
+}
 
-/* scrollbar */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: rgba(0,255,157,0.2); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0,255,157,0.4); }
+.hdr-role{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.68rem;color:var(--cyan);letter-spacing:3px;text-transform:uppercase;
+  margin-top:7px;
+  overflow:hidden;white-space:nowrap;width:0;border-right:2px solid var(--cyan);
+  animation:tw 2s steps(55) 3.2s forwards, curBlink .8s step-end 3.2s 4;
+}
+@keyframes tw{to{width:100%;}}
+@keyframes curBlink{50%{border-color:transparent;}}
 
-@media (max-width: 600px) {
-  .sgrid { grid-template-columns: 1fr; }
-  .sfull { grid-column: 1; }
-  .glitch { font-size: 1.4rem; letter-spacing: 3px; }
-  .term-body { padding: 16px; }
+.hdr-quote{
+  font-size:.7rem;color:var(--muted);font-style:italic;
+  margin-top:9px;line-height:1.6;
+  opacity:0;animation:fadeSlide .6s ease 5.2s forwards;
+  border-left:2px solid var(--cyan);padding-left:10px;
+}
+@keyframes fadeSlide{to{opacity:1;transform:none;}}
+
+/* status pills */
+.status-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;}
+.spill{
+  display:flex;align-items:center;gap:6px;
+  font-size:.58rem;padding:4px 10px;border-radius:20px;
+  border:1px solid;
+}
+.spill.green{border-color:rgba(0,255,136,.3);color:var(--green);background:rgba(0,255,136,.05);}
+.spill.cyan{border-color:var(--border);color:var(--cyan);background:rgba(0,212,255,.05);}
+.spill.gold{border-color:rgba(232,196,106,.3);color:var(--gold);background:rgba(232,196,106,.05);}
+.sdot{width:6px;height:6px;border-radius:50%;}
+.sdot.g{background:var(--green);box-shadow:0 0 6px var(--green);animation:statusPulse 2s infinite;}
+.sdot.c{background:var(--cyan);box-shadow:0 0 6px var(--cyan);animation:statusPulse 2.5s infinite .5s;}
+.sdot.o{background:var(--gold);box-shadow:0 0 6px var(--gold);animation:statusPulse 3s infinite 1s;}
+@keyframes statusPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+/* ── SECTION ── */
+.sec{display:flex;flex-direction:column;gap:12px;}
+.sec-title{
+  font-family:'Orbitron',monospace;font-size:.6rem;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;color:var(--cyan);
+  display:flex;align-items:center;gap:10px;
+}
+.sec-title::before{content:'//';opacity:.5;font-size:.7rem;}
+.sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+
+/* summary */
+.sum{
+  font-size:.72rem;line-height:1.85;color:var(--text);
+  border-left:2px solid var(--cyan);padding:14px 16px;
+  border-radius:0 8px 8px 0;
+  background:linear-gradient(135deg,rgba(0,212,255,.04),transparent);
+  position:relative;overflow:hidden;
+  transition:background .3s;
+}
+.sum:hover{background:linear-gradient(135deg,rgba(0,212,255,.07),transparent);}
+.sum::before{
+  content:'';position:absolute;top:-100%;left:0;right:0;height:100%;
+  background:linear-gradient(180deg,transparent,rgba(0,212,255,.04),transparent);
+  animation:sumShimmer 5s ease-in-out infinite 5s;
+}
+@keyframes sumShimmer{0%,100%{top:-100%;}50%{top:100%;}}
+
+/* ── CARDS ── */
+.card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:15px 17px;
+  position:relative;overflow:hidden;
+  transition:border-color .3s,box-shadow .3s,transform .3s;
+}
+.card:hover{
+  border-color:rgba(0,212,255,.4);
+  box-shadow:0 0 40px rgba(0,212,255,.08),0 10px 40px rgba(0,0,0,.5);
+  transform:translateY(-3px);
+}
+/* left accent bar */
+.card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--cyan),var(--cyan2),transparent);
+  transition:box-shadow .3s;
+}
+.card:hover::before{box-shadow:0 0 15px var(--cyan);}
+/* shimmer sweep */
+.card::after{
+  content:'';position:absolute;top:0;left:-100%;width:40%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(0,212,255,.04),transparent);
+  transition:left .8s ease;pointer-events:none;
+}
+.card:hover::after{left:200%;}
+/* corner bracket */
+.card-corner{position:absolute;top:8px;right:8px;width:14px;height:14px;
+  border-top:1.5px solid rgba(0,212,255,.3);border-right:1.5px solid rgba(0,212,255,.3);}
+
+.ch{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px;}
+.ct{font-family:'Orbitron',monospace;font-size:.78rem;font-weight:700;color:#fff;letter-spacing:.5px;}
+.cs{font-size:.65rem;color:var(--cyan);font-weight:600;margin-top:2px;}
+.cd{
+  font-size:.58rem;color:var(--muted);white-space:nowrap;
+  padding:2px 8px;border:1px solid var(--border);border-radius:20px;
+  transition:color .2s,border-color .2s;
+}
+.card:hover .cd{color:var(--cyan);border-color:rgba(0,212,255,.35);}
+
+.card ul{margin-top:9px;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:5px;}
+.card ul li{font-size:.68rem;color:var(--text);line-height:1.65;padding-left:16px;position:relative;}
+.card ul li::before{content:'▸';position:absolute;left:0;color:var(--cyan);font-size:.6rem;}
+
+.stk{display:flex;flex-wrap:wrap;gap:4px;margin-top:9px;}
+.sp{
+  font-size:.55rem;padding:2px 8px;border-radius:20px;
+  border:1px solid rgba(0,212,255,.2);color:var(--cyan);
+  background:rgba(0,212,255,.05);
+  transition:background .2s,box-shadow .2s;
+}
+.sp:hover{background:rgba(0,212,255,.18);box-shadow:0 0 8px rgba(0,212,255,.25);}
+
+/* ── EDU CARD ── */
+.edu{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:15px 17px;
+  display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;
+  position:relative;overflow:hidden;
+  transition:border-color .3s,box-shadow .3s,transform .3s;
+}
+.edu:hover{border-color:rgba(232,196,106,.35);box-shadow:0 0 35px rgba(232,196,106,.07);transform:translateY(-3px);}
+.edu::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--gold),#c49a3a,transparent);}
+.edu::after{content:'';position:absolute;top:0;left:-100%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(232,196,106,.04),transparent);transition:left .8s;pointer-events:none;}
+.edu:hover::after{left:200%;}
+
+.ed{font-family:'Orbitron',monospace;font-size:.8rem;font-weight:700;color:#fff;}
+.eu{font-size:.68rem;color:var(--cyan);margin-top:3px;}
+.ec{font-size:.6rem;color:var(--muted);margin-top:4px;}
+.em{text-align:right;}
+.cgpa{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:900;color:var(--gold);
+  text-shadow:0 0 20px rgba(232,196,106,.5);animation:cgpaPulse 3s ease-in-out infinite;}
+@keyframes cgpaPulse{0%,100%{text-shadow:0 0 10px rgba(232,196,106,.3);}50%{text-shadow:0 0 25px rgba(232,196,106,.7),0 0 50px rgba(232,196,106,.3);}}
+.cgpalabel{font-size:.52rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;}
+.ey{font-size:.58rem;color:var(--muted);margin-top:4px;}
+
+/* ── RADAR CHART SECTION ── */
+.radar-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+#radarCanvas{flex-shrink:0;}
+.radar-legend{display:flex;flex-direction:column;gap:7px;flex:1;}
+.rl-item{display:flex;align-items:center;gap:8px;font-size:.62rem;color:var(--text);}
+.rl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.rl-bar-wrap{flex:1;height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;}
+.rl-bar{height:100%;border-radius:2px;width:0%;transition:width 1.8s cubic-bezier(.16,1,.3,1);}
+
+/* ── INTEREST TAGS (large) ── */
+.int-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.itag{
+  font-size:.62rem;padding:6px 14px;border-radius:6px;
+  border:1px solid var(--border);color:var(--muted);
+  background:rgba(0,212,255,.03);
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.itag::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,212,255,.1),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.itag:hover::before{opacity:1;}
+.itag:hover{border-color:rgba(0,212,255,.4);color:var(--cyan);transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,212,255,.12);}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease;}
+.reveal.vis{opacity:1;transform:none;}
+
+/* ── PRINT ── */
+@media print{
+  body{background:var(--bg);-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .page{margin:0;box-shadow:none;width:100%;}
+  #boot,#particle-canvas,.scan-sweep,.hex-bg,.scanlines,.noise,#cursor,#cursor-trail{display:none!important;}
+  .reveal{opacity:1;transform:none;}
+  .hdr-role{width:100%;animation:none;border:none;}
+}
+@media screen and (max-width:760px){
+  .page{width:100%;flex-direction:column;margin:0;}
+  .sidebar{width:100%;min-width:unset;}
+  .hdr-role{animation:none;width:100%;border:none;}
 }
 </style>
 </head>
 <body>
 
-<div id="cur"></div>
-<div id="cur2"></div>
-<canvas id="mx"></canvas>
-<div class="sweep"></div>
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
 
-<div class="wrap">
-
-<!-- ══════ HERO ══════ -->
-<div class="terminal">
-  <div class="term-bar">
-    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
-    <div class="term-title">virajgambhir1215-hub / README.md</div>
+<!-- BOOT -->
+<div id="boot">
+  <div class="boot-hex">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" stroke="rgba(0,212,255,0.6)" stroke-width="1.5"/>
+      <polygon points="50,15 85,32.5 85,67.5 50,85 15,67.5 15,32.5" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+      <line x1="50" y1="5" x2="50" y2="15" stroke="rgba(0,212,255,0.8)" stroke-width="1.5"/>
+      <line x1="95" y1="27.5" x2="85" y2="32.5" stroke="rgba(0,212,255,0.8)" stroke-width="1.5"/>
+      <line x1="95" y1="72.5" x2="85" y2="67.5" stroke="rgba(0,212,255,0.8)" stroke-width="1.5"/>
+      <line x1="50" y1="95" x2="50" y2="85" stroke="rgba(0,212,255,0.8)" stroke-width="1.5"/>
+      <line x1="5" y1="72.5" x2="15" y2="67.5" stroke="rgba(0,212,255,0.8)" stroke-width="1.5"/>
+      <line x1="5" y1="27.5" x2="15" y2="32.5" stroke="rgba(0,212,255,0.8)" stroke-width="1.5"/>
+      <circle cx="50" cy="50" r="3" fill="rgba(0,212,255,0.8)"/>
+    </svg>
+    <div class="boot-hex-text">VG</div>
   </div>
-  <div class="term-body">
-    <div class="glitch-wrap">
-      <div class="glitch" data-text="VIRAJ GAMBHIR">VIRAJ GAMBHIR</div>
-      <div class="subtitle">
-        &gt;&nbsp;
-        <span style="color:var(--cyan)">Aspiring Cybersecurity Analyst</span>
-        &nbsp;·&nbsp;
-        <span style="color:var(--gold)">Ethical Hacker</span>
-        &nbsp;·&nbsp;
-        <span style="color:var(--purple)">Embedded Security Builder</span>
-        <span class="blink">_</span>
-      </div>
-    </div>
-
-    <div class="badges">
-      <a class="badge b-li" href="https://www.linkedin.com/in/viraj-gambhir-09b7aa313/" target="_blank">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        LinkedIn
-      </a>
-      <a class="badge b-gh" href="https://github.com/virajgambhir1215-hub" target="_blank">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-        GitHub
-      </a>
-      <a class="badge b-gm" href="mailto:virajgambhir1215@gmail.com">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
-        Email
-      </a>
-      <a class="badge b-loc" href="#">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-        Meerut, India
-      </a>
-    </div>
-    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:4px;">
-      <span class="badge b-st"><span class="pdot"></span>&nbsp;Open to Opportunities</span>
-      <span class="badge b-st" style="color:var(--muted);">&#128065; Profile Views: Live</span>
+  <div class="boot-status" id="boot-status">INITIALIZING...</div>
+  <div class="boot-log">
+    <div class="blog" id="b1">&gt; <span class="ok">SYS</span> :: Booting secure environment...</div>
+    <div class="blog" id="b2">&gt; <span class="ok">NET</span> :: Establishing encrypted channel... <span class="ok">✓</span></div>
+    <div class="blog" id="b3">&gt; <span class="warn">SEC</span> :: Scanning for threats... <span class="ok">CLEAN</span></div>
+    <div class="blog" id="b4">&gt; <span class="ok">DB </span> :: Loading profile: VIRAJ GAMBHIR...</div>
+    <div class="blog" id="b5">&gt; <span class="ok">AUTH</span> :: Identity verified — Cybersecurity Analyst</div>
+    <div class="blog" id="b6">&gt; <span class="ok">SYS</span> :: Portfolio decrypted. <span class="warn">Access GRANTED ■</span></div>
+  </div>
+  <div class="boot-progress-wrap">
+    <div class="boot-progress-pct" id="boot-pct">0%</div>
+    <div class="boot-progress-track">
+      <div class="boot-progress-bar"></div>
     </div>
   </div>
 </div>
 
-<!-- ══════ WHOAMI ══════ -->
-<div class="terminal">
-  <div class="term-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><div class="term-title">whoami.sh</div></div>
-  <div class="term-body">
-    <div class="sh">&#128272; whoami</div>
-    <div class="wblock">
-      <div class="prompt"><span class="u">viraj@kali</span>:<span class="p">~$</span> cat profile.txt</div>
-      <div class="plines">
-        <div class="pl"><span class="pk">Name &nbsp;&nbsp;&nbsp;&nbsp; :</span><span class="pv">&nbsp;<span class="h">Viraj Gambhir</span></span></div>
-        <div class="pl"><span class="pk">Role &nbsp;&nbsp;&nbsp;&nbsp; :</span><span class="pv">&nbsp;Aspiring Cybersecurity Analyst</span></div>
-        <div class="pl"><span class="pk">Location &nbsp;:</span><span class="pv">&nbsp;Meerut, Uttar Pradesh, India</span></div>
-        <div class="pl"><span class="pk">Education :</span><span class="pv">&nbsp;B.Tech CSE @ <span class="h">Gautam Buddha University</span> (CGPA: <span class="g">8.75</span>)</span></div>
-        <div class="pl"><span class="pk">Status &nbsp;&nbsp;&nbsp;:</span><span class="pv">&nbsp;2nd Year Undergraduate | Expected Graduation: 2029</span></div>
-        <div class="pl"><span class="pk">Passion &nbsp;&nbsp;:</span><span class="pv">&nbsp;Breaking systems to understand how to defend them</span></div>
+<!-- BACKGROUNDS -->
+<canvas id="particle-canvas"></canvas>
+<div class="hex-bg"></div>
+<div class="scanlines"></div>
+<div class="scan-sweep"></div>
+<div class="noise"></div>
+
+<div class="page">
+  <div class="top-bar"></div>
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar">
+
+    <div class="av-wrap reveal">
+      <div class="av-outer">
+        <div class="av-ring3"></div>
+        <div class="av-ring2"></div>
+        <div class="av-ring1"></div>
+        <div class="av">VG</div>
       </div>
-      <div class="qblock">
-        "I chose cybersecurity because I've always been curious about how systems work — and how they can be broken and protected. What excites me most is the constant challenge; new threats keep emerging and there's always something new to learn."
+      <div class="av-name">VIRAJ GAMBHIR</div>
+      <div class="av-tag">🔐 CYBERSECURITY</div>
+    </div>
+
+    <div class="ss reveal">
+      <div class="st">Contact</div>
+      <div class="ci"><span class="cl">Phone</span><span class="cv">+91 9084970468</span></div>
+      <div class="ci"><span class="cl">Email</span><span class="cv"><a href="mailto:virajgambhir1215@gmail.com">virajgambhir1215@gmail.com</a></span></div>
+      <div class="ci"><span class="cl">LinkedIn</span><span class="cv"><a href="https://www.linkedin.com/in/viraj-gambhir-09b7aa313/" target="_blank">viraj-gambhir</a></span></div>
+      <div class="ci"><span class="cl">GitHub</span><span class="cv"><a href="https://github.com/virajgambhir1215-hub" target="_blank">virajgambhir1215-hub</a></span></div>
+      <div class="ci"><span class="cl">Location</span><span class="cv">Meerut, Uttar Pradesh, India</span></div>
+    </div>
+
+    <div class="ss reveal">
+      <div class="st">Core Skills</div>
+      <div class="ski"><div class="skr"><span class="skn">Ethical Hacking</span><span class="skp">78%</span></div><div class="skbar"><div class="skfill" data-w="78" style="background:linear-gradient(90deg,#0096b8,#00d4ff,rgba(255,255,255,.8))"></div></div></div>
+      <div class="ski"><div class="skr"><span class="skn">Kali Linux</span><span class="skp">75%</span></div><div class="skbar"><div class="skfill" data-w="75"></div></div></div>
+      <div class="ski"><div class="skr"><span class="skn">Network Security</span><span class="skp">70%</span></div><div class="skbar"><div class="skfill" data-w="70"></div></div></div>
+      <div class="ski"><div class="skr"><span class="skn">Java</span><span class="skp">72%</span></div><div class="skbar"><div class="skfill" data-w="72" style="background:linear-gradient(90deg,#b87a00,#e8c46a,rgba(255,255,255,.8));box-shadow:0 0 8px rgba(232,196,106,.6)"></div></div></div>
+      <div class="ski"><div class="skr"><span class="skn">C Programming</span><span class="skp">68%</span></div><div class="skbar"><div class="skfill" data-w="68"></div></div></div>
+      <div class="ski"><div class="skr"><span class="skn">Cryptography</span><span class="skp">65%</span></div><div class="skbar"><div class="skfill" data-w="65" style="background:linear-gradient(90deg,#5a1acc,#7b2fff,rgba(255,255,255,.8));box-shadow:0 0 8px rgba(123,47,255,.6)"></div></div></div>
+    </div>
+
+    <div class="ss reveal">
+      <div class="st">Tools & Platforms</div>
+      <div class="tg-group">
+        <span class="tg">Kali Linux</span><span class="tg">Arduino IDE</span>
+        <span class="tg">ESP32</span><span class="tg">GitHub</span>
+        <span class="tg">Linux CLI</span><span class="tg">RFID RC522</span>
+        <span class="tg">Wi-Fi Protocols</span><span class="tg">Arduino Uno</span>
       </div>
     </div>
-  </div>
+
+    <div class="ss reveal">
+      <div class="st">Soft Skills</div>
+      <div class="tg-group">
+        <span class="tg">Analytical Thinking</span><span class="tg">Problem Solving</span>
+        <span class="tg">Adaptability</span><span class="tg">Curiosity-Driven</span>
+        <span class="tg">Team Collaboration</span>
+      </div>
+    </div>
+
+    <div class="ss reveal">
+      <div class="st">Certification</div>
+      <div class="cert">
+        <div class="cert-name">Coincent — Cyber Security &amp; Ethical Hacking</div>
+        <div class="cert-sub">Phase 1 Certified &nbsp;·&nbsp; 3-Month Program</div>
+        <div class="cert-sub" style="color:var(--muted);margin-top:2px;">Dec 2025 – Jan 2026 &nbsp;·&nbsp; E-Cell IIT Madras</div>
+        <div class="cert-badge">Verified &amp; Issued 06 Feb 2026</div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <main class="main">
+
+    <header class="hdr reveal">
+      <div class="hdr-name" data-text="VIRAJ GAMBHIR">VIRAJ <span class="acc">GAMBHIR</span></div>
+      <div class="hdr-role">// Cybersecurity Analyst &nbsp;·&nbsp; Ethical Hacker &nbsp;·&nbsp; Builder</div>
+      <div class="hdr-quote">"Breaking systems to build better defenses — one vulnerability at a time."</div>
+      <div class="status-row">
+        <div class="spill green"><div class="sdot g"></div>Open to Opportunities</div>
+        <div class="spill cyan"><div class="sdot c"></div>Meerut, India</div>
+        <div class="spill gold"><div class="sdot o"></div>CGPA: 8.75</div>
+      </div>
+    </header>
+
+    <section class="sec reveal">
+      <div class="sec-title">Professional Summary</div>
+      <div class="sum">
+        Cybersecurity enthusiast and B.Tech CSE undergraduate at Gautam Buddha University (CGPA: 8.75) with certified expertise in Ethical Hacking &amp; Cybersecurity through the Coincent program (E-Cell, IIT Madras). Passionate about penetration testing, embedded security, and building secure communication systems. Experienced in developing real-world hardware security projects — from RFID access control to encrypted P2P messengers. Driven to grow into a skilled Cybersecurity Analyst or Penetration Tester who helps organizations build attack-proof, resilient infrastructures.
+      </div>
+    </section>
+
+    <!-- SKILL RADAR -->
+    <section class="sec reveal">
+      <div class="sec-title">Skill Proficiency Radar</div>
+      <div class="radar-wrap">
+        <canvas id="radarCanvas" width="160" height="160"></canvas>
+        <div class="radar-legend">
+          <div class="rl-item"><div class="rl-dot" style="background:#00d4ff;box-shadow:0 0 6px #00d4ff"></div><span style="min-width:110px">Ethical Hacking</span><div class="rl-bar-wrap"><div class="rl-bar" data-w="78" style="background:linear-gradient(90deg,#00a8cc,#00d4ff)"></div></div><span style="color:var(--cyan);margin-left:6px;font-size:.55rem">78%</span></div>
+          <div class="rl-item"><div class="rl-dot" style="background:#00d4ff;box-shadow:0 0 6px #00d4ff"></div><span style="min-width:110px">Kali Linux</span><div class="rl-bar-wrap"><div class="rl-bar" data-w="75" style="background:linear-gradient(90deg,#00a8cc,#00d4ff)"></div></div><span style="color:var(--cyan);margin-left:6px;font-size:.55rem">75%</span></div>
+          <div class="rl-item"><div class="rl-dot" style="background:#00ff88;box-shadow:0 0 6px #00ff88"></div><span style="min-width:110px">Network Security</span><div class="rl-bar-wrap"><div class="rl-bar" data-w="70" style="background:linear-gradient(90deg,#00cc66,#00ff88)"></div></div><span style="color:var(--green);margin-left:6px;font-size:.55rem">70%</span></div>
+          <div class="rl-item"><div class="rl-dot" style="background:#e8c46a;box-shadow:0 0 6px #e8c46a"></div><span style="min-width:110px">Java</span><div class="rl-bar-wrap"><div class="rl-bar" data-w="72" style="background:linear-gradient(90deg,#b87a00,#e8c46a)"></div></div><span style="color:var(--gold);margin-left:6px;font-size:.55rem">72%</span></div>
+          <div class="rl-item"><div class="rl-dot" style="background:#00d4ff;box-shadow:0 0 6px #00d4ff"></div><span style="min-width:110px">C Programming</span><div class="rl-bar-wrap"><div class="rl-bar" data-w="68" style="background:linear-gradient(90deg,#00a8cc,#00d4ff)"></div></div><span style="color:var(--cyan);margin-left:6px;font-size:.55rem">68%</span></div>
+          <div class="rl-item"><div class="rl-dot" style="background:#7b2fff;box-shadow:0 0 6px #7b2fff"></div><span style="min-width:110px">Cryptography</span><div class="rl-bar-wrap"><div class="rl-bar" data-w="65" style="background:linear-gradient(90deg,#5a1acc,#7b2fff)"></div></div><span style="color:var(--purple);margin-left:6px;font-size:.55rem">65%</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec reveal">
+      <div class="sec-title">Projects</div>
+
+      <div class="card">
+        <div class="card-corner"></div>
+        <div class="ch">
+          <div><div class="ct">Ghost Chat — Secure P2P Messenger</div><div class="cs">Network Security · Encrypted Communication</div></div>
+          <div class="cd">2024</div>
+        </div>
+        <ul>
+          <li>Built a covert offline P2P chat application on ESP32 microcontrollers — anonymous, server-free communication over local Wi-Fi, eliminating interception attack surfaces.</li>
+          <li>Developed and adversarially tested using Kali Linux to simulate real-world network threats and validate communication integrity under attack conditions.</li>
+          <li>Applied core principles of network anonymity, protocol-level security, and secure system design — demonstrating a genuine offensive security mindset.</li>
+          <li>Zero dependency on external infrastructure, making the system resistant to surveillance and third-party data harvesting.</li>
+        </ul>
+        <div class="stk">
+          <span class="sp">ESP32</span><span class="sp">Kali Linux</span><span class="sp">Java</span>
+          <span class="sp">Wi-Fi Protocols</span><span class="sp">P2P Networking</span><span class="sp">Secure Comms</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-corner"></div>
+        <div class="ch">
+          <div><div class="ct">RFID Smart Attendance System</div><div class="cs">Hardware Security · Embedded Access Control</div></div>
+          <div class="cd">2024</div>
+        </div>
+        <ul>
+          <li>Engineered a contactless attendance system using Arduino Uno and RFID RC522 — replacing manual processes with tamper-resistant card-based identity verification.</li>
+          <li>Implemented secure access logging with unique RFID tag authentication, ensuring only authorized individuals are recorded — core physical security principles.</li>
+          <li>Designed entirely in C, optimizing read latency and minimizing false authentication events through tight hardware-level control.</li>
+          <li>Demonstrated real-world understanding of physical access control systems — a critical domain in enterprise cybersecurity.</li>
+        </ul>
+        <div class="stk">
+          <span class="sp">Arduino Uno</span><span class="sp">RFID RC522</span><span class="sp">C</span>
+          <span class="sp">Arduino IDE</span><span class="sp">Access Control</span><span class="sp">Embedded Systems</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec reveal">
+      <div class="sec-title">Certification &amp; Training</div>
+      <div class="card">
+        <div class="card-corner"></div>
+        <div class="ch">
+          <div><div class="ct">Cyber Security &amp; Ethical Hacking — Coincent</div><div class="cs">Phase 1 Certified · E-Cell IIT Madras · Issued 06 Feb 2026</div></div>
+          <div class="cd">Dec 2025 – Jan 2026</div>
+        </div>
+        <ul>
+          <li>Completed a structured 2-month cybersecurity program covering ethical hacking, penetration testing methodology, and vulnerability identification fundamentals.</li>
+          <li>Gained practical exposure to security assessment techniques, network defense strategies, and real-world threat simulation scenarios.</li>
+          <li>Awarded Phase 1 Certification by Coincent in association with E-Cell, IIT Madras upon demonstrating core cybersecurity competencies.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="sec reveal">
+      <div class="sec-title">Education</div>
+      <div class="edu">
+        <div>
+          <div class="ed">B.Tech — Computer Science &amp; Engineering</div>
+          <div class="eu">Gautam Buddha University, Greater Noida, India</div>
+          <div class="ec">Cryptography · Network Security · Data Structures · Operating Systems · DBMS</div>
+        </div>
+        <div class="em">
+          <div class="cgpa">8.75</div>
+          <div class="cgpalabel">CGPA</div>
+          <div class="ey">2025 – 2029 (Expected)</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec reveal">
+      <div class="sec-title">Areas of Interest</div>
+      <div class="int-grid">
+        <span class="itag">⚔️ Penetration Testing</span>
+        <span class="itag">🔍 Vulnerability Assessment</span>
+        <span class="itag">🌐 Network Security</span>
+        <span class="itag">🔐 Secure System Design</span>
+        <span class="itag">🎯 Ethical Hacking</span>
+        <span class="itag">🔑 Cryptography</span>
+        <span class="itag">🔧 Embedded Security</span>
+        <span class="itag">📡 SOC Operations</span>
+      </div>
+    </section>
+
+  </main>
 </div>
-
-<!-- ══════ ABOUT ══════ -->
-<div class="terminal">
-  <div class="term-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><div class="term-title">about.sh</div></div>
-  <div class="term-body">
-    <div class="sh">&#9889; About Me</div>
-    <div class="alist">
-      <div class="al"><span class="ali">&#127891;</span><span>Pursuing <b>B.Tech in Computer Science &amp; Engineering</b> at Gautam Buddha University with a <b>CGPA of 8.75</b></span></div>
-      <div class="al"><span class="ali">&#128737;&#65039;</span><span>Certified in <b>Cybersecurity &amp; Ethical Hacking</b> — Coincent Program, in association with <b>E-Cell, IIT Madras</b> (Dec 2025 – Jan 2026)</span></div>
-      <div class="al"><span class="ali">&#128301;</span><span>Currently exploring <b>penetration testing</b>, <b>network security</b>, and <b>embedded system security</b></span></div>
-      <div class="al"><span class="ali">&#127807;</span><span>Learning <b>vulnerability assessment</b>, <b>SOC operations</b>, and <b>advanced Linux security tools</b></span></div>
-      <div class="al"><span class="ali">&#127959;&#65039;</span><span>Building security-aware projects — from <b>hardware access control systems</b> to <b>encrypted P2P messengers</b></span></div>
-      <div class="al"><span class="ali">&#127919;</span><span>Goal: Become a skilled <b>Penetration Tester / Cybersecurity Analyst</b> helping organizations stay secure</span></div>
-      <div class="al"><span class="ali">&#128172;</span><span>Ask me about <b>Kali Linux</b>, <b>ethical hacking</b>, <b>Arduino security projects</b>, or <b>network protocols</b></span></div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════ SKILLS ══════ -->
-<div class="terminal">
-  <div class="term-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><div class="term-title">skills.sh</div></div>
-  <div class="term-body">
-    <div class="sh">&#128295; Tech Stack &amp; Skills</div>
-    <div class="scat">
-      <div class="clabel">&#128274; Cybersecurity</div>
-      <div class="srow">
-        <span class="sk sk-cy">&#129009; Kali Linux</span>
-        <span class="sk sk-re">&#128128; Ethical Hacking</span>
-        <span class="sk sk-cy">&#127760; Network Security</span>
-        <span class="sk sk-pu">&#128273; Cryptography</span>
-        <span class="sk sk-re">&#127919; Penetration Testing</span>
-      </div>
-    </div>
-    <div class="scat">
-      <div class="clabel">&#128187; Programming Languages</div>
-      <div class="srow">
-        <span class="sk sk-cy">&#9881;&#65039; C</span>
-        <span class="sk sk-go">&#9749; Java</span>
-      </div>
-    </div>
-    <div class="scat">
-      <div class="clabel">&#9881;&#65039; Hardware &amp; Embedded</div>
-      <div class="srow">
-        <span class="sk sk-gr">&#129302; Arduino</span>
-        <span class="sk sk-re">&#128225; ESP32</span>
-        <span class="sk sk-cy">&#128179; RFID RC522</span>
-      </div>
-    </div>
-    <div class="scat">
-      <div class="clabel">&#129520; Tools &amp; Platforms</div>
-      <div class="srow">
-        <span class="sk sk-gr">&#128025; GitHub</span>
-        <span class="sk sk-go">&#128039; Linux</span>
-        <span class="sk sk-cy">&#128153; VS Code</span>
-        <span class="sk sk-pu">&#128296; Arduino IDE</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════ PROJECTS ══════ -->
-<div class="terminal">
-  <div class="term-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><div class="term-title">projects.sh</div></div>
-  <div class="term-body">
-    <div class="sh">&#128640; Featured Projects</div>
-
-    <div class="pcard">
-      <div class="ptitle">&#128123; Ghost Chat — Secure P2P Messenger</div>
-      <div class="ptag">// Network Security · Encrypted Communication · ESP32</div>
-      <div class="pline">Offline. Anonymous. Untraceable.</div>
-      <div class="ascii"><span class="hl">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
-<span class="hl">&#9474;</span>  Device A (ESP32)  &lt;&#9472;&#9472;&#9472;&#9472; <span class="hl">Local Wi-Fi</span> &#9472;&#9472;&#9472;&#9472;&gt;  Device B (ESP32)  <span class="hl">&#9474;</span>
-<span class="hl">&#9474;</span>        |                   No Server                    |       <span class="hl">&#9474;</span>
-<span class="hl">&#9474;</span>  <span class="hl">Kali Linux Dev</span>    &lt;&#9472;&#9472; Adversarial Test &#9472;&#9472;&gt;   Secure Comms    <span class="hl">&#9474;</span>
-<span class="hl">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span></div>
-      <div class="pdesc">A <b>covert peer-to-peer chat application</b> built on ESP32 microcontrollers — anonymous, infrastructure-independent communication over local Wi-Fi. No internet. No servers. No trace.</div>
-      <div class="pbullets">
-        <div class="pb">&#128274; Zero external server dependency — eliminates third-party interception risk</div>
-        <div class="pb">&#128225; Device-to-device communication via Wi-Fi protocols</div>
-        <div class="pb">&#128039; Developed &amp; tested on <b>Kali Linux</b> to simulate adversarial network conditions</div>
-        <div class="pb">&#127917; Designed with anonymity and reduced attack surface as core principles</div>
-      </div>
-      <div class="stk">
-        <span class="sp">ESP32</span><span class="sp">Java</span><span class="sp">Kali Linux</span><span class="sp">Wi-Fi Protocols</span><span class="sp">P2P Networking</span>
-      </div>
-    </div>
-
-    <div class="pcard">
-      <div class="ptitle">&#128225; RFID Smart Attendance System</div>
-      <div class="ptag">// Hardware Security · Embedded Systems · Access Control</div>
-      <div class="pline">Hardware security meets access control.</div>
-      <div class="ascii"><span class="hl">  [RFID Card]</span> &#9472;&#9472;&gt; <span class="hl">[RC522 Module]</span> &#9472;&#9472;&gt; <span class="hl">[Arduino Uno]</span> &#9472;&#9472;&gt; [Access Log]
-       &#8593;                                       |
-  Unique Tag ID                         <span class="hl">C-based Auth</span>
-  Verification                          Logic Engine</div>
-      <div class="pdesc">An <b>automated attendance management system</b> using RFID technology — contactless, tamper-resistant card authentication replacing manual processes entirely.</div>
-      <div class="pbullets">
-        <div class="pb">&#128272; Unique RFID tag-based identity verification</div>
-        <div class="pb">&#128683; Tamper-resistant access logging for authorized users only</div>
-        <div class="pb">&#9889; Optimized read latency through efficient <b>C architecture</b></div>
-        <div class="pb">&#128737;&#65039; Demonstrates real-world <b>physical security</b> and <b>access control</b> principles</div>
-      </div>
-      <div class="stk">
-        <span class="sp">Arduino Uno</span><span class="sp">RFID RC522</span><span class="sp">C</span><span class="sp">Arduino IDE</span><span class="sp">Embedded Systems</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════ EDUCATION ══════ -->
-<div class="terminal">
-  <div class="term-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><div class="term-title">education.sh</div></div>
-  <div class="term-body">
-    <div class="sh">&#127891; Education</div>
-    <table class="gtbl">
-      <tr><th>Degree</th><th>Institution</th><th>CGPA</th><th>Year</th></tr>
-      <tr><td>B.Tech — Computer Science &amp; Engineering</td><td>Gautam Buddha University, Greater Noida</td><td><b>8.75 / 10</b></td><td>2025 – 2029 (Expected)</td></tr>
-    </table>
-    <div style="margin-top:12px;font-size:0.63rem;color:var(--muted);">
-      <span style="color:var(--cyan)">Relevant Coursework:</span>&nbsp; Cryptography · Network Security · Data Structures · Operating Systems · DBMS
-    </div>
-  </div>
-</div>
-
-<!-- ══════ CERTIFICATIONS ══════ -->
-<div class="terminal">
-  <div class="term-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><div class="term-title">certifications.sh</div></div>
-  <div class="term-body">
-    <div class="sh">&#128220; Certifications</div>
-    <div class="ccard">
-      <div class="cname">&#128737;&#65039; Cyber Security &amp; Ethical Hacking — Phase 1</div>
-      <div class="cmeta">
-        Issued by: <span class="h">Coincent</span>&nbsp; · &nbsp;In association with: <span class="g">E-Cell, IIT Madras</span><br>
-        Duration: Dec 2025 – Jan 2026 &nbsp;·&nbsp; Issued: 06 Feb 2026
-      </div>
-      <div class="cstatus"><span class="pdot"></span>&nbsp;Verified &amp; Active</div>
-      <div class="ctopics">
-        <span class="ctag">Penetration Testing Methodology</span>
-        <span class="ctag">Vulnerability Identification</span>
-        <span class="ctag">Security Assessment Fundamentals</span>
-        <span class="ctag">Ethical Hacking Principles</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════ GITHUB STATS ══════ -->
-<div class="terminal">
-  <div class="term-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><div class="term-title">github-stats.sh</div></div>
-  <div class="term-body">
-    <div class="sh">&#128202; GitHub Stats</div>
-    <div class="sgrid">
-      <img class="simg" src="https://github-readme-stats.vercel.app/api?username=virajgambhir1215-hub&show_icons=true&theme=chartreuse-dark&hide_border=true&bg_color=020a06&title_color=00ff9d&icon_color=00ff9d&text_color=b0ffd0" alt="GitHub Stats" loading="lazy"/>
-      <img class="simg" src="https://github-readme-stats.vercel.app/api/top-langs/?username=virajgambhir1215-hub&layout=compact&theme=chartreuse-dark&hide_border=true&bg_color=020a06&title_color=00ff9d&text_color=b0ffd0" alt="Top Languages" loading="lazy"/>
-      <img class="simg sfull" src="https://streak-stats.demolab.com/?user=virajgambhir1215-hub&theme=chartreuse-dark&hide_border=true&background=020a06&stroke=00ff9d&ring=00ff9d&fire=f0c040&currStreakLabel=00ff9d" alt="GitHub Streak" loading="lazy"/>
-    </div>
-  </div>
-</div>
-
-<!-- ══════ INTERESTS ══════ -->
-<div class="terminal">
-  <div class="term-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><div class="term-title">interests.sh</div></div>
-  <div class="term-body">
-    <div class="sh">&#127919; Areas of Interest</div>
-    <div class="iascii"><span class="hl">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>  <span class="hl">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>  <span class="hl">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
-<span class="hl">&#9474;</span> Penetration      <span class="hl">&#9474;</span>  <span class="hl">&#9474;</span> Vulnerability       <span class="hl">&#9474;</span>  <span class="hl">&#9474;</span> Network          <span class="hl">&#9474;</span>
-<span class="hl">&#9474;</span> Testing          <span class="hl">&#9474;</span>  <span class="hl">&#9474;</span> Assessment          <span class="hl">&#9474;</span>  <span class="hl">&#9474;</span> Security         <span class="hl">&#9474;</span>
-<span class="hl">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>  <span class="hl">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>  <span class="hl">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
-<span class="hl">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>  <span class="hl">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>  <span class="hl">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
-<span class="hl">&#9474;</span> Ethical          <span class="hl">&#9474;</span>  <span class="hl">&#9474;</span> Cryptography        <span class="hl">&#9474;</span>  <span class="hl">&#9474;</span> Embedded         <span class="hl">&#9474;</span>
-<span class="hl">&#9474;</span> Hacking          <span class="hl">&#9474;</span>  <span class="hl">&#9474;</span>                     <span class="hl">&#9474;</span>  <span class="hl">&#9474;</span> Security         <span class="hl">&#9474;</span>
-<span class="hl">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>  <span class="hl">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>  <span class="hl">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
-<span class="hl">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>  <span class="hl">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
-<span class="hl">&#9474;</span> SOC              <span class="hl">&#9474;</span>  <span class="hl">&#9474;</span> Secure System       <span class="hl">&#9474;</span>
-<span class="hl">&#9474;</span> Operations       <span class="hl">&#9474;</span>  <span class="hl">&#9474;</span> Design              <span class="hl">&#9474;</span>
-<span class="hl">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>  <span class="hl">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span></div>
-  </div>
-</div>
-
-<!-- ══════ CONNECT ══════ -->
-<div class="terminal">
-  <div class="term-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><div class="term-title">connect.sh</div></div>
-  <div class="term-body">
-    <div class="sh">&#129309; Connect With Me</div>
-    <table class="ctbl">
-      <tr><td>&#128188; LinkedIn</td><td><a href="https://www.linkedin.com/in/viraj-gambhir-09b7aa313/" target="_blank">viraj-gambhir-09b7aa313</a></td></tr>
-      <tr><td>&#128025; GitHub</td><td><a href="https://github.com/virajgambhir1215-hub" target="_blank">virajgambhir1215-hub</a></td></tr>
-      <tr><td>&#128231; Email</td><td><a href="mailto:virajgambhir1215@gmail.com">virajgambhir1215@gmail.com</a></td></tr>
-      <tr><td>&#128205; Location</td><td>Meerut, Uttar Pradesh, India</td></tr>
-    </table>
-
-    <div class="footer">
-      <div class="frow">
-        <div class="fi" style="color:var(--cyan)"><span class="pdot"></span>&nbsp;SYSTEM: ONLINE</div>
-        <div class="fi" style="color:var(--gold)">&#9888; THREAT LEVEL: LEARNING</div>
-        <div class="fi" style="color:var(--purple)">&#11041; MODE: BUILDER</div>
-      </div>
-      <div class="fq">"The quieter you become, the more you can hear." — Kali Linux</div>
-      <div class="fs">&#11088; If you find my work interesting, consider starring a repository!</div>
-    </div>
-  </div>
-</div>
-
-</div><!-- /wrap -->
 
 <script>
-// CURSOR
-const cur = document.getElementById('cur');
-const cur2 = document.getElementById('cur2');
-let mx = 0, my = 0, tx = 0, ty = 0;
-document.addEventListener('mousemove', function(e) {
-  mx = e.clientX; my = e.clientY;
-  cur.style.left = mx + 'px';
-  cur.style.top  = my + 'px';
-});
-setInterval(function() {
-  tx += (mx - tx) * 0.1;
-  ty += (my - ty) * 0.1;
-  cur2.style.left = tx + 'px';
-  cur2.style.top  = ty + 'px';
-}, 12);
+/* ══ CURSOR ══ */
+const cur = document.getElementById('cursor');
+const tra = document.getElementById('cursor-trail');
+let mx=0,my=0,tx=0,ty=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+setInterval(()=>{tx+=(mx-tx)*.12;ty+=(my-ty)*.12;tra.style.left=tx+'px';tra.style.top=ty+'px';},16);
 
-// MATRIX RAIN
-(function() {
-  var c = document.getElementById('mx');
-  var ctx = c.getContext('2d');
-  var W, H, cols, drops;
-  function resize() {
-    W = c.width  = window.innerWidth;
-    H = c.height = window.innerHeight;
-    cols = Math.floor(W / 16);
-    drops = [];
-    for (var i = 0; i < cols; i++) drops[i] = Math.random() * -60;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-  var chars = 'ABCDEF0123456789!@#$%&<>{}[]|/\\'.split('');
-  function draw() {
-    ctx.fillStyle = 'rgba(2,6,8,0.06)';
-    ctx.fillRect(0, 0, W, H);
-    for (var i = 0; i < drops.length; i++) {
-      var bright = Math.random() > 0.97;
-      ctx.fillStyle = bright ? '#ffffff' : (Math.random() > 0.8 ? '#00ff9d' : '#006030');
-      ctx.font = (bright ? 'bold ' : '') + '13px Share Tech Mono,monospace';
-      var ch = chars[Math.floor(Math.random() * chars.length)];
-      ctx.fillText(ch, i * 16, drops[i] * 16);
-      if (drops[i] * 16 > H && Math.random() > 0.975) drops[i] = 0;
-      drops[i] += 0.5;
-    }
-  }
-  setInterval(draw, 55);
+/* ══ BOOT SEQUENCE ══ */
+(function(){
+  const ids=['b1','b2','b3','b4','b5','b6'];
+  const statuses=['INITIALIZING...','LOADING MODULES...','SCANNING...','FETCHING PROFILE...','AUTHENTICATING...','ACCESS GRANTED'];
+  const pct=document.getElementById('boot-pct');
+  const stat=document.getElementById('boot-status');
+  ids.forEach((id,i)=>{
+    setTimeout(()=>{
+      document.getElementById(id).classList.add('on');
+      stat.textContent=statuses[i];
+      const p=Math.round((i+1)/ids.length*100);
+      pct.textContent=p+'%';
+    },i*350+200);
+  });
+  setTimeout(()=>{
+    document.getElementById('boot').classList.add('out');
+    setTimeout(()=>{document.getElementById('boot').remove();},900);
+    initReveal();
+    animateBars();
+    drawRadar();
+    animateRadarBars();
+  },ids.length*350+600);
 })();
 
-// SCROLL REVEAL
-(function() {
-  var els = document.querySelectorAll('.terminal');
-  var io = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e, i) {
-      if (e.isIntersecting) {
-        setTimeout(function() { e.target.classList.add('vis'); }, i * 80);
+/* ══ PARTICLE NETWORK ══ */
+(function(){
+  const canvas=document.getElementById('particle-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,pts=[];
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+
+  class Pt{
+    constructor(){this.reset();}
+    reset(){
+      this.x=Math.random()*W;this.y=Math.random()*H;
+      this.vx=(Math.random()-.5)*.4;this.vy=(Math.random()-.5)*.4;
+      this.r=Math.random()*2+.5;this.alpha=Math.random()*.6+.2;
+      this.color=Math.random()>.7?'232,196,106':'0,212,255';
+    }
+    update(){
+      this.x+=this.vx;this.y+=this.vy;
+      if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();
+    }
+    draw(){
+      ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${this.color},${this.alpha})`;ctx.fill();
+    }
+  }
+
+  for(let i=0;i<80;i++)pts.push(new Pt());
+
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{p.update();p.draw();});
+    pts.forEach((a,i)=>{
+      pts.slice(i+1).forEach(b=>{
+        const d=Math.hypot(a.x-b.x,a.y-b.y);
+        if(d<120){
+          ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+          ctx.strokeStyle=`rgba(0,212,255,${(1-d/120)*.12})`;ctx.lineWidth=.5;ctx.stroke();
+        }
+      });
+    });
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ══ REVEAL ══ */
+function initReveal(){
+  const els=document.querySelectorAll('.reveal');
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach((e,idx)=>{
+      if(e.isIntersecting){
+        setTimeout(()=>e.target.classList.add('vis'),idx*100);
         io.unobserve(e.target);
       }
     });
-  }, { threshold: 0.08 });
-  els.forEach(function(el) { io.observe(el); });
-})();
+  },{threshold:.1});
+  els.forEach(el=>io.observe(el));
+}
 
-// TERMINAL TITLE RETYPE ON HOVER
-document.querySelectorAll('.terminal').forEach(function(term) {
-  var title = term.querySelector('.term-title');
-  var orig = title.textContent;
-  term.addEventListener('mouseenter', function() {
-    var i = 0;
-    title.textContent = '';
-    var iv = setInterval(function() {
-      title.textContent = orig.slice(0, ++i);
-      if (i >= orig.length) clearInterval(iv);
-    }, 25);
-  });
-});
+/* ══ SKILL BARS ══ */
+function animateBars(){
+  setTimeout(()=>{
+    document.querySelectorAll('.skfill').forEach((el,i)=>{
+      setTimeout(()=>{el.style.width=el.dataset.w+'%';},i*160+300);
+    });
+  },400);
+}
 
-// RANDOM GLITCH RETRIGGER
-setInterval(function() {
-  var g = document.querySelector('.glitch');
-  if (g) { g.style.animation = 'none'; void g.offsetWidth; g.style.animation = ''; }
-}, 7000);
+/* ══ RADAR CHART ══ */
+function drawRadar(){
+  const canvas=document.getElementById('radarCanvas');
+  const ctx=canvas.getContext('2d');
+  const cx=80,cy=80,R=65;
+  const labels=['Hacking','Kali','NetSec','Java','C','Crypto'];
+  const vals=[.78,.75,.70,.72,.68,.65];
+  const N=6;
+  let frame=0;
+  const colors=['#00d4ff','#00d4ff','#00ff88','#e8c46a','#00d4ff','#7b2fff'];
+
+  function draw(){
+    ctx.clearRect(0,0,160,160);
+    frame=Math.min(frame+.04,1);
+    const ease=t=>1-Math.pow(1-t,3);
+    const t=ease(frame);
+
+    // web rings
+    [.25,.5,.75,1].forEach(r=>{
+      ctx.beginPath();
+      for(let i=0;i<N;i++){
+        const a=i/N*Math.PI*2-Math.PI/2;
+        const x=cx+R*r*Math.cos(a);const y=cy+R*r*Math.sin(a);
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle=`rgba(0,212,255,${r===1?.15:.08})`;ctx.lineWidth=.8;ctx.stroke();
+    });
+
+    // spokes
+    for(let i=0;i<N;i++){
+      const a=i/N*Math.PI*2-Math.PI/2;
+      ctx.beginPath();ctx.moveTo(cx,cy);
+      ctx.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a));
+      ctx.strokeStyle='rgba(0,212,255,0.1)';ctx.lineWidth=.8;ctx.stroke();
+    }
+
+    // filled area
+    ctx.beginPath();
+    vals.forEach((v,i)=>{
+      const a=i/N*Math.PI*2-Math.PI/2;
+      const rv=v*R*t;
+      const x=cx+rv*Math.cos(a);const y=cy+rv*Math.sin(a);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    });
+    ctx.closePath();
+    ctx.fillStyle='rgba(0,212,255,0.08)';ctx.fill();
+    ctx.strokeStyle='rgba(0,212,255,0.5)';ctx.lineWidth=1.5;ctx.stroke();
+
+    // dots + glow
+    vals.forEach((v,i)=>{
+      const a=i/N*Math.PI*2-Math.PI/2;
+      const rv=v*R*t;
+      const x=cx+rv*Math.cos(a);const y=cy+rv*Math.sin(a);
+      ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);
+      ctx.fillStyle=colors[i];ctx.fill();
+      ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);
+      ctx.fillStyle=`rgba(0,212,255,.15)`;ctx.fill();
+    });
+
+    // center dot
+    ctx.beginPath();ctx.arc(cx,cy,3,0,Math.PI*2);
+    ctx.fillStyle='rgba(0,212,255,.5)';ctx.fill();
+
+    if(frame<1)requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+function animateRadarBars(){
+  setTimeout(()=>{
+    document.querySelectorAll('.rl-bar').forEach((el,i)=>{
+      setTimeout(()=>{el.style.width=el.dataset.w+'%';},i*180+400);
+    });
+  },600);
+}
 </script>
 </body>
 </html>
